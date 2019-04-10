@@ -1,1 +1,47 @@
+<h1><%= @post.title%></h1>
+Filed under:
+<%@post.categories.each do |c|%>
+  <%= link_to c.name, c%>
+<%end%>
 
+<p><%= @post.content%></p>
+
+<hr>
+
+<h4>Add a comment</h4>
+<%= form_for @comment do |f|%>
+    <%= f.text_area :content%> <br>
+    <%= f.hidden_field :post_id, value: "#{@post.id}"%>
+    Commented by:
+    <%= f.collection_select :user_id, @users, :id, :username, {include_blank: true}%>
+    <i>or create a new user by username:</i>
+      <%= f.fields_for :user_attributes, @comment.user do |user_attribute|%>
+        <%= user_attribute.text_field :username%>
+      <%end%><br>
+    <%= f.submit "Create Comment"%>
+<%end%>
+
+<h4>Comments</h4>
+<p>
+  <% @post.comments.each do |comment|%>
+    <% if comment.user %>
+      <%= comment.user.username%> says: <%= comment.content%>
+    <%else%>
+      Deleted user says: <%= comment.content%>
+    <%end%><br>
+  <%end%>
+</p>
+
+<h4>Users Engagement (Commenters)</h4>
+<% @my_users.each do |user|%>
+  <% if user %>
+    <%= link_to user.username, user%>
+  <%end%>
+
+<%end%>
+
+<p><%= link_to "Edit this post", edit_post_path%></p>
+
+<p><%= button_to "Delete Post", {}, {method: "delete"}%></p>
+
+<p><%= link_to "Back to all posts", posts_path%></p>
