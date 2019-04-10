@@ -1,1 +1,22 @@
+<%= form_for @post do |f|%>
+  <%= f.label :title%><br>
+  <%= f.text_field :title%><br>
 
+  <%= f.label :content%><br>
+  <%= f.text_area :content%><br>
+
+  <%= f.label :category_ids, "Select Category(ies) for this post"%><br>
+  <%= f.collection_check_boxes :category_ids, @categories, :id, :name%><br>
+  <br>
+
+  <%= f.label :categories, "Create A New Category"%><br>
+  <%= f.fields_for :categories do |category|%>
+    <%= category.label :name%>
+    <%= category.text_field :name%>
+  <% end%>
+
+  <br><br>
+
+  <%= f.submit "Create Post"%>
+
+  <%end%>
